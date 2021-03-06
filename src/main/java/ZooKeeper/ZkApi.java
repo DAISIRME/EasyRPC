@@ -13,7 +13,6 @@ import java.util.concurrent.CountDownLatch;
 
 @Component
 public class ZkApi {
-
     private static final Logger logger = LoggerFactory.getLogger(ZkApi.class);
 
     private static ZooKeeper zkClient;
@@ -173,6 +172,5 @@ public class ZkApi {
 
         // 删除节点出发 监听事件
         deleteNode(path);
-
     }
 }
