@@ -1,8 +1,12 @@
 package customer;
 
 
+import lombok.Builder;
 import netty.NettyClient;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
 import publicinterface.HelloService;
+
 
 public class ClientBootstrap {
     // 这里定义协议头
@@ -16,7 +20,7 @@ public class ClientBootstrap {
         NettyClient.initClient(address);
         // 创建代理对象 服务引用
         HelloService service = (HelloService) customer.getBean(HelloService.class, providerName);
-
+        ApplicationContext applicationContext = new GenericApplicationContext();
         for (; ; ) {
             Thread.sleep(2 * 1000);
             // 通过代理对象调用服务提供者的方法(服务)

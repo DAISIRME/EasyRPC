@@ -20,12 +20,12 @@ public class NettyServer {
         zkApi.init();
         zkApi.createNode(serviceName,ipaddress);
     }
-    public static void startServer(String hostName, int port) {
+    public void startServer(String hostName, int port) {
         startServer0(hostName, port);
     }
 
     // 编写一个方法，完成对 NettyServer 的初始化和启动
-    private static void startServer0(String hostname, int port) {
+    public void startServer0(String hostname, int port) {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {

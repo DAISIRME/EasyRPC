@@ -1,8 +1,8 @@
 package provider;
 
 
+import org.springframework.context.annotation.Configuration;
 import publicinterface.HelloService;
-
 public class HelloServiceImpl implements HelloService {
 
     private static int count = 0;

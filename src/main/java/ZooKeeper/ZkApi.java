@@ -16,6 +16,7 @@ public class ZkApi {
     private static final Logger logger = LoggerFactory.getLogger(ZkApi.class);
 
     private static ZooKeeper zkClient;
+
     static {
         try {
             final CountDownLatch countDownLatch = new CountDownLatch(1);
