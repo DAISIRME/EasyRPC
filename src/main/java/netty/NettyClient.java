@@ -25,8 +25,7 @@ public class NettyClient {
         public String getAddress(String serviceName)
         {
             ZkApi zkApi = new ZkApi();
-            zkApi.init();
-            return zkApi.getData(serviceName,(Event)->{
+            return zkApi.getData(serviceName, (Event)->{
                 System.out.println(Event.getType());});
         }
         // 编写方法使用代理模式，获取一个代理对象
@@ -34,7 +33,7 @@ public class NettyClient {
             return Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
                 new Class<?>[]{serivceClass}, (proxy, method,args) -> {
                     System.out.println("(proxy, method, args) 进入...." + (++count) + " 次");
-                    // {}  部分的代码，客户端每调用一次 hello, 就会进入到该代码
+                    // {}  部分的代码, 客户端每调用一次 hello,就会进入到该代码
                     // 设置要发给服务器端的信息
                     // providerName 协议头 args[0] 就是客户端调用api hello(???), 参数
                     client.setPara(providerName + args[0]+method.getName());

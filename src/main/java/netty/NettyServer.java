@@ -11,21 +11,23 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.timeout.IdleStateHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
 public class NettyServer {
 
-    public static void exposeService(String serviceName,String ipaddress)
-    {
-        ZkApi zkApi = new ZkApi();
-        zkApi.init();
-        zkApi.createNode(serviceName,ipaddress);
-    }
-    public void startServer(String hostName, int port) {
-        startServer0(hostName, port);
-    }
+    private static List<String> interfaceList;
+
 
     // 编写一个方法，完成对 NettyServer 的初始化和启动
-    public void startServer0(String hostname, int port) {
+    public void startServer0(String hostname, int port, NettyServerHandler nettyServerHandler) {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
@@ -38,7 +40,7 @@ public class NettyServer {
                                           ChannelPipeline pipeline = ch.pipeline();
                                           pipeline.addLast(new StringDecoder());
                                           pipeline.addLast(new StringEncoder());
-                                          pipeline.addLast(new NettyServerHandler()); // 业务处理器
+                                          pipeline.addLast(nettyServerHandler); // 业务处理器
                                       }
                                   }
                     );

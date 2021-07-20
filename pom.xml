@@ -18,10 +18,16 @@
             <artifactId>netty-all</artifactId>
             <version>4.1.20.Final</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.zookeeper</groupId>
             <artifactId>zookeeper</artifactId>
             <version>3.5.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.68.noneautotype</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

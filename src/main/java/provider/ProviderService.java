@@ -3,6 +3,7 @@ package provider;
 import Annotation.ERProvider;
 import ZooKeeper.ZkApi;
 import netty.NettyServer;
+import netty.NettyServerHandler;
 import org.apache.zookeeper.client.ZKClientConfig;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
@@ -21,6 +22,8 @@ public class ProviderService implements ApplicationContextAware, InitializingBea
 
     private static final Integer host = 8181;
 
+    @Autowired
+    NettyServerHandler nettyServerHandler;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -28,11 +31,12 @@ public class ProviderService implements ApplicationContextAware, InitializingBea
         beansWithAnnotation.values().forEach(bean ->{
             ERProvider annotation = bean.getClass().getAnnotation(ERProvider.class);
             String interfaceName = annotation.val();
+            nettyServerHandler.add(interfaceName, bean);
         });
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        nettyServer.startServer0(localIp, host);
+        nettyServer.startServer0(localIp, host, nettyServerHandler);
     }
 }

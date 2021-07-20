@@ -17,8 +17,8 @@ public class ServerBootstrap  {
     private static String packageName = "/publicinterface.HelloService3/334";
     public static void main(String[] args) throws KeeperException, InterruptedException {
           ZkApi zkApi = new ZkApi();
-          zkApi.init();
 //        NettyServer.exposeService(packageName,hostName+":"+port);
+
         boolean node1 = zkApi.createNode(packageName, "1");
         System.out.println(node1);
         boolean node = zkApi.createNode(packageName, "1");

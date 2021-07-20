@@ -13,32 +13,34 @@ import java.util.concurrent.CountDownLatch;
 
 @Component
 public class ZkApi {
+
     private static final Logger logger = LoggerFactory.getLogger(ZkApi.class);
 
     private static ZooKeeper zkClient;
 
-    static {
+    private static final String serverIp = "127.0.0.1:2181";
+    @PostConstruct
+    private void init() {
         try {
             final CountDownLatch countDownLatch = new CountDownLatch(1);
             //连接成功后，会回调watcher监听，此连接操作是异步的，执行完new语句后，直接调用后续代码
             //  可指定多台服务地址 127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183
-            zkClient = new ZooKeeper("127.0.0.1:2181", 4000, new Watcher() {
+            zkClient = new ZooKeeper(serverIp, 4000, new Watcher() {
                 @Override
                 public void process(WatchedEvent event) {
-                    if(Event.KeeperState.SyncConnected==event.getState()){
+                    if (Event.KeeperState.SyncConnected == event.getState()) {
                         //如果收到了服务端的响应事件,连接成功
                         countDownLatch.countDown();
                     }
                 }
             });
             countDownLatch.await();
-            logger.info("【初始化ZooKeeper连接状态....】={}",zkClient.getState());
+            logger.info("【初始化ZooKeeper连接状态....】={}", zkClient.getState());
 
-        }catch (Exception e){
-            logger.error("初始化ZooKeeper连接异常....】={}",e);
+        } catch (Exception e) {
+            logger.error("初始化ZooKeeper连接异常....】={}", e);
         }
     }
-
     /**
      * 判断指定节点是否存在
      * @param path
@@ -124,7 +126,7 @@ public class ZkApi {
      * @param path 父节点path
      */
     public List<String> getChildren(String path) throws KeeperException, InterruptedException{
-        List<String> list = zkClient.getChildren(path, new Watcher() {
+=        List<String> list = zkClient.getChildren(path, new Watcher() {
             @Override
             public void process(WatchedEvent watchedEvent) {
                 if(watchedEvent.getType()== Event.EventType.NodeChildrenChanged)
@@ -141,11 +143,10 @@ public class ZkApi {
      * @param path
      * @return
      */
-    public  String getData(String path,Watcher watcher){
+    public String getData(String path,Watcher watcher){
         try {
             Stat stat = new Stat();
-
-            byte[] bytes=zkClient.getData(path,watcher,stat);
+            byte[] bytes = zkClient.getData(path,watcher,stat);
             return new String(bytes);
         }catch (Exception e){
             e.printStackTrace();
@@ -153,25 +154,4 @@ public class ZkApi {
         }
     }
 
-
-    /**
-     * 测试方法  初始化
-     */
-    @PostConstruct
-    public void init(){
-        String path="/zk-watcher-2";
-        logger.info("【执行初始化测试方法。。。。。。。。。。。。】");
-        createNode(path,"测试");
-        String value=getData(path, new Watcher() {
-            @Override
-            public void process(WatchedEvent watchedEvent) {
-                System.out.println(watchedEvent.getState());
-            }
-        });
-        System.out.println(value);
-        logger.info("【执行初始化测试方法getData返回值。。。。。。。。。。。。】={}",value);
-
-        // 删除节点出发 监听事件
-        deleteNode(path);
-    }
 }

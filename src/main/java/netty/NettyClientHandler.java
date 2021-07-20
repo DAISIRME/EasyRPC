@@ -43,6 +43,7 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter implements 
         return result; // 服务方返回的结果
     }
 
+
     // (2)
     void setPara(String para) {
         System.out.println(" setPara  ");
