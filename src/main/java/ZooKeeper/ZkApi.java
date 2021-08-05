@@ -126,7 +126,7 @@ public class ZkApi {
      * @param path 父节点path
      */
     public List<String> getChildren(String path) throws KeeperException, InterruptedException{
-=        List<String> list = zkClient.getChildren(path, new Watcher() {
+        List<String> list = zkClient.getChildren(path, new Watcher() {
             @Override
             public void process(WatchedEvent watchedEvent) {
                 if(watchedEvent.getType()== Event.EventType.NodeChildrenChanged)

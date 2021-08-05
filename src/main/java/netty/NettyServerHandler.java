@@ -57,8 +57,9 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<RpcRequest> 
         String args = rpcRequest.getArgs();
         Object o = BeanMap.get(className);
         Method method = o.getClass().getMethod(methodName, Class.forName(args));
-        Object invoke = method.invoke(o, args);
+        Object invoked = method.invoke(o, args);
         RpcResponse response = new RpcResponse();
+        response.setResult(invoked);
         ctx.channel().writeAndFlush(response);
     }
 

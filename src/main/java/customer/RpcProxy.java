@@ -26,7 +26,7 @@ public class RpcProxy implements InvocationHandler {
         RpcRequest rpcRequest = createRequest(proxy, method, args);
         String addressInfo = lruLoadBalance.getData();
         NettyClient.initClient(addressInfo);
-        return nettyClientHandler.call();
+        return nettyClientHandler.call(rpcRequest);
     }
 
     private RpcRequest createRequest(Object proxy, Method method, Object[] args) {

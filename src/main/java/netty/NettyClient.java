@@ -25,8 +25,8 @@ public class NettyClient {
         public String getAddress(String serviceName)
         {
             ZkApi zkApi = new ZkApi();
-            return zkApi.getData(serviceName, (Event)->{
-                System.out.println(Event.getType());});
+            return zkApi.getData(serviceName, (Event)->
+                    System.out.println(Event.getType()));
         }
         // 编写方法使用代理模式，获取一个代理对象
         public Object getBean(final Class<?> serivceClass, final String providerName) {

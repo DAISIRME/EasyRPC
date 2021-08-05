@@ -1,11 +1,12 @@
 package netty;
 
+import customer.RpcRequest;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
 import java.util.concurrent.Callable;
 
-public class NettyClientHandler extends ChannelInboundHandlerAdapter implements Callable {
+public class NettyClientHandler extends ChannelInboundHandlerAdapter  {
 
     private ChannelHandlerContext context; // 上下文
     private String result; // 返回的结果
@@ -33,16 +34,14 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter implements 
     }
 
     // 被代理对象调用, 发送数据给服务器，-> wait -> 等待被唤醒(channelRead) -> 返回结果 (3)-》5
-    @Override
-    public synchronized Object call() throws Exception {
-        System.out.println(" call1 被调用  ");
-        context.writeAndFlush(para);
+    public synchronized Object call(RpcRequest rpcRequest) throws Exception {
+        System.out.println(" call1 被调用");
+        context.writeAndFlush(rpcRequest);
         // 进行 wait
         wait(); // 等待 channelRead 方法获取到服务器的结果后，唤醒
         System.out.println(" call2 被调用");
         return result; // 服务方返回的结果
     }
-
 
     // (2)
     void setPara(String para) {
